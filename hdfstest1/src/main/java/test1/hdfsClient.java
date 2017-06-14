@@ -5,27 +5,61 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.fs.permission.FsAction;
+import org.apache.hadoop.fs.permission.FsPermission;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
- * Created by Administrator on 2017-6-9.
+ * Created by Administrator on 2017-6-13.
  */
-public class hdfsClient {
-    public static void main(String[] args) throws IOException {
-        Configuration configuration =  new Configuration();
-        //获取hdfs客户端对象的时候，需要指定文件系统的类型为hdfs
-        configuration.set("fs.defaultFS","hdfs://101.39.43.122:11:9000");
-        //或许FileSystem实例对象
-        FileSystem fileSystem = FileSystem.get(configuration);
+public class HdfsClient {
+    FileSystem fs = null;
 
-        RemoteIterator<LocatedFileStatus> listFiles = fileSystem.listFiles(new Path("/"),false);
-
-        //通过这个迭代器就可以遍历出我们hdfs文件系统根目录下的  文件
-        while (listFiles.hasNext()){
-            LocatedFileStatus next = listFiles.next();
-            Path path = next.getPath();
-            System.out.println(path.getName());
-        }
+    @Before
+    public void  init() throws URISyntaxException, IOException, InterruptedException {
+        Configuration conf = new Configuration();
+        fs = FileSystem.get(new URI("hdfs://hadoop2:9000"), conf, "root");
     }
+
+    /**
+     * 往hdfs上传文件
+     * @throws IOException
+     */
+    @Test
+    public void testAddFileToHdfs() throws IOException {
+        //要上传的文件
+        Path src = new Path("D:/bbb.txt");
+        //要上传到hdfs的路径
+        Path dst = new Path("/");
+        fs.copyFromLocalFile(src,dst);
+        fs.close();
+    }
+
+    /**
+     * 新增修改重命名文件
+     * @throws IOException
+     */
+    @Test
+    public void testMkdirAndDeleteAndRename() throws IOException {
+        //在hdfs中创建文件夹
+        boolean mkdirs = fs.mkdirs(new Path("/testDir"));
+        //删除文件夹,如果非空文件夹,参数2必须填写true
+        boolean delete = fs.delete(new Path("/testDir"), true);
+        //重命名文件夹或者文件
+        boolean rename = fs.rename(new Path("/testDir"),new Path("/testDir2"));
+
+    }
+
+
+    @Test
+    public void testListFiles() throws IOException {
+
+        RemoteIterator<LocatedFileStatus> listFiles = fs.listFiles(new Path("/testDir"),true);
+    }
+
 }
