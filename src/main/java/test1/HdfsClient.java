@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
  * Created by Administrator on 2017-6-13.
  */
 public class hdfsClient {
-    FileSystem fs = null;
+    FileSystem fs = null;123123
 
     @Before
     public void  init() throws URISyntaxException, IOException, InterruptedException {
