@@ -61,7 +61,7 @@ public class hdfsClient {
     @Test
     public void testListFiles() throws IOException {
         RemoteIterator<LocatedFileStatus> listFiles = fs.listFiles(new Path("/testDir"),true);
-        while(listFiles.hasNext()){
+        while(listFiles.hasNext()){123123
             LocatedFileStatus fileStatus = listFiles.next();
             System.out.println(fileStatus.getPath().getName());
             System.out.println(fileStatus.getBlockSize());
