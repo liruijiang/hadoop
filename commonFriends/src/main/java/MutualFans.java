@@ -15,19 +15,21 @@ public class MutualFans {
             String line = value.toString();
             String[] splits = line.split(":");
             String person = splits[0];
-            String[] fans = splits[1].split(",");
+            String fans = splits[1];
 
-            for (String fanString : fans) {
-                context.write(new Text(person), new Text(fanString));
-            }
-
+            context.write(new Text(person),new Text(fans));
         }
     }
 
     public static class MutualFansReduce extends Reducer<Text, Text, Text, Text>{
         @Override
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-            
+
+        }
+
+        @Override
+        protected void cleanup(Context context) throws IOException, InterruptedException {
+
         }
     }
 }
