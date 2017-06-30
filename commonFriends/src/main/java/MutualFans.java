@@ -24,7 +24,7 @@ public class MutualFans {
     public static class MutualFansReduce extends Reducer<Text, Text, Text, Text>{
         @Override
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-
+            String k = k.toString();
         }
 
         @Override
